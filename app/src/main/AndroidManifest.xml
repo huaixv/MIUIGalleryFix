@@ -12,6 +12,20 @@
             android:icon="@mipmap/ic_launcher"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/Theme.MIUIGalleryFix"/>
+            android:theme="@style/Theme.MIUIGalleryFix">
+
+        <meta-data
+                android:name="xposedmodule"
+                android:value="true"/>
+        <meta-data
+                android:name="xposeddescription"
+                android:value="我是Xposed模块简介"/>
+        <meta-data
+                android:name="xposedminversion"
+                android:value="54"/>
+        <meta-data
+                android:name="xposedscope"
+                android:resource="@array/xposedscope"/>
+    </application>
 
 </manifest>

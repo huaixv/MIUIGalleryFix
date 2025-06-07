@@ -1,0 +1,5 @@
+<resources>
+    <string-array name="xposedscope">
+        <item>com.miui.gallery</item>
+    </string-array>
+</resources>
