@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "me.huaixv.miuigalleryfix"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "me.huaixv.miuigalleryfix"

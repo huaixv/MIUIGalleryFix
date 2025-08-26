@@ -10,6 +10,10 @@ import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 class MainHook : IXposedHookLoadPackage {
+    companion object {
+        const val VERBOSE = false // Set to true to enable Xposed logging
+    }
+
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
         // 过滤不必要的应用
         if (lpparam.packageName != "com.miui.gallery") return
@@ -961,27 +965,33 @@ class MainHook : IXposedHookLoadPackage {
                             val newJValue = jValue and mask.inv()
                             param.args[0] = newJValue
 
-                            XposedBridge.log("CommonAlbumMemoryDataSourceImpl.queryAlbums() called:")
-                            XposedBridge.log("  j = $newJValue")
+                            if (VERBOSE) {
+                                XposedBridge.log("CommonAlbumMemoryDataSourceImpl.queryAlbums() called:")
+                                XposedBridge.log("  j = $newJValue")
+                            }
 
                             // Dump QueryParam fields
                             val clazzQueryParam = queryParam.javaClass
                             for (field in clazzQueryParam.declaredFields) {
                                 field.isAccessible = true
                                 val value = field.get(queryParam)
-                                XposedBridge.log("  QueryParam.${field.name} = $value")
+                                if (VERBOSE) XposedBridge.log("  QueryParam.${field.name} = $value")
                             }
 
                         } catch (e: Throwable) {
-                            XposedBridge.log("Error dumping queryAlbums params: ${e.message}")
-                            XposedBridge.log(Log.getStackTraceString(e))
+                            if (VERBOSE) {
+                                XposedBridge.log("Error dumping queryAlbums params: ${e.message}")
+                                XposedBridge.log(Log.getStackTraceString(e))
+                            }
                         }
                     }
                 })
 
         } catch (e: Throwable) {
-            XposedBridge.log("Failed to hook queryAlbums: ${e.message}")
-            XposedBridge.log(Log.getStackTraceString(e))
+            if (VERBOSE) {
+                XposedBridge.log("Failed to hook queryAlbums: ${e.message}")
+                XposedBridge.log(Log.getStackTraceString(e))
+            }
         }
 
 
@@ -1007,19 +1017,23 @@ class MainHook : IXposedHookLoadPackage {
                             }
 
                             if (matchFound) {
-                                XposedBridge.log("isHiddenAlbum() called from AlbumGroupByAlbumTypeFunction → force return false")
+                                if (VERBOSE) XposedBridge.log("isHiddenAlbum() called from AlbumGroupByAlbumTypeFunction → force return false")
                                 param.result = false
                             }
 
                         } catch (e: Throwable) {
-                            XposedBridge.log("Error inside isHiddenAlbum hook: ${e.message}")
-                            XposedBridge.log(Log.getStackTraceString(e))
+                            if (VERBOSE) {
+                                XposedBridge.log("Error inside isHiddenAlbum hook: "+e.message)
+                                XposedBridge.log(Log.getStackTraceString(e))
+                            }
                         }
                     }
                 })
         } catch (e: Throwable) {
-            XposedBridge.log("Failed to hook isHiddenAlbum: ${e.message}")
-            XposedBridge.log(Log.getStackTraceString(e))
+            if (VERBOSE) {
+                XposedBridge.log("Failed to hook isHiddenAlbum: "+e.message)
+                XposedBridge.log(Log.getStackTraceString(e))
+            }
         }
 
     }
